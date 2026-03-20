@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+
+      - name: Embed build tag in Info.plist
+        run: plutil -replace JottrBuildTag -string "${{ steps.version.outputs.tag }}" Info.plist
+
+      - name: Install build tools
+        run: brew install create-dmg fileicon
+
+      - name: Build universal binary
+        run: make ARCH=universal APP_NAME=Jottr BUNDLE_ID=app.jottr CODESIGN_IDENTITY="-"
+
+      - name: Create DMG
+        run: make dmg ARCH=universal APP_NAME=Jottr BUNDLE_ID=app.jottr CODESIGN_IDENTITY="-"
+
+      - name: Save DMG
+        run: mv build/Jottr.dmg Jottr.dmg
+
+      - name: Create Release
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Jottr ${{ steps.version.outputs.tag }}
+          body: |
+            ## Download
+
+            **[Jottr.dmg](https://github.com/RamenFN/jottr/releases/download/${{ steps.version.outputs.tag }}/Jottr.dmg)** — Universal build for all Macs (Apple Silicon + Intel).
+
+            > Note: On first launch, you may need to right-click the app and select "Open" to bypass Gatekeeper (the app is ad-hoc signed, not notarized).
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            Jottr.dmg
