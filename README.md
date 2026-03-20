@@ -101,7 +101,7 @@ GitHub Actions picks it up and publishes a release with `Jottr.dmg` attached.
 
 ---
 
-## What's coming
+## What's coming ✨✨📈
 
 Jottr started as a dictation tool. The next version goes further.
 
