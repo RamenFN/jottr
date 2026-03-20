@@ -8,6 +8,7 @@ class RecordingOverlayState: ObservableObject {
     @Published var audioLevel: Float = 0.0
     @Published var intensityLevel: IntensityLevel = .l2
     @Published var isIntensityFlashing: Bool = false
+    @Published var flashingLevelLabel: String = ""
 }
 
 enum OverlayPhase {
@@ -108,30 +109,90 @@ class RecordingOverlayManager {
 
     func flashIntensityChange() {
         DispatchQueue.main.async {
-            guard let panel = self.overlayWindow,
-                  let _ = NSScreen.main else { return }
-            let currentFrame = panel.frame
-            // Drop DOWN into view, then spring back up past center and settle
-            let droppedFrame = NSRect(x: currentFrame.origin.x,
-                                      y: currentFrame.origin.y - 10,
-                                      width: currentFrame.width,
-                                      height: currentFrame.height)
-
-            // Amber flash inside the pill
-            self.overlayState.isIntensityFlashing = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                self.overlayState.isIntensityFlashing = false
-            }
-
-            NSAnimationContext.runAnimationGroup { ctx in
-                ctx.duration = 0.1
-                ctx.timingFunction = CAMediaTimingFunction(name: .easeIn)
-                panel.animator().setFrame(droppedFrame, display: true)
-            } completionHandler: {
+            let label = self.overlayState.intensityLevel.selectorLabel
+            if let panel = self.overlayWindow {
+                // Recording is active — animate the existing overlay panel
+                let currentFrame = panel.frame
+                let droppedFrame = NSRect(x: currentFrame.origin.x,
+                                          y: currentFrame.origin.y - 10,
+                                          width: currentFrame.width,
+                                          height: currentFrame.height)
+                self.overlayState.flashingLevelLabel = label
+                self.overlayState.isIntensityFlashing = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.overlayState.isIntensityFlashing = false
+                }
                 NSAnimationContext.runAnimationGroup { ctx in
-                    ctx.duration = 0.26
-                    ctx.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 1.56, 0.64, 1.0)
-                    panel.animator().setFrame(currentFrame, display: true)
+                    ctx.duration = 0.1
+                    ctx.timingFunction = CAMediaTimingFunction(name: .easeIn)
+                    panel.animator().setFrame(droppedFrame, display: true)
+                } completionHandler: {
+                    NSAnimationContext.runAnimationGroup { ctx in
+                        ctx.duration = 0.3
+                        ctx.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 1.56, 0.64, 1.0)
+                        panel.animator().setFrame(currentFrame, display: true)
+                    }
+                }
+            } else {
+                // Idle — show a brief toast pill that drops from the notch then slides back up
+                self._showIntensityToast(label: label)
+            }
+        }
+    }
+
+    private func _showIntensityToast(label: String) {
+        guard let screen = NSScreen.main else { return }
+
+        let hasNotch = screenHasNotch
+        let overlap = hasNotch ? notchOverlap : 0
+        let contentHeight: CGFloat = 28
+        let panelHeight = contentHeight + overlap
+
+        // Measure text width
+        let font = NSFont.systemFont(ofSize: 11, weight: .black)
+        let textWidth = (label.uppercased() as NSString).size(withAttributes: [.font: font]).width
+        let panelWidth = max(textWidth + 28, hasNotch ? max(notchWidth, 80) : 80)
+
+        let toastPanel = makeOverlayPanel(width: panelWidth, height: panelHeight)
+        toastPanel.hasShadow = false
+
+        let toastView = IntensityToastView(label: label)
+        toastPanel.contentView = makeNotchContent(
+            width: panelWidth,
+            height: panelHeight,
+            cornerRadius: hasNotch ? 16 : 10,
+            rootView: toastView.padding(.top, overlap)
+        )
+
+        let x = panelX(screen, width: panelWidth)
+        let hiddenY = screen.frame.maxY
+        let visibleY = screen.frame.maxY - panelHeight
+        let droppedY = visibleY - 10
+
+        toastPanel.setFrame(NSRect(x: x, y: hiddenY, width: panelWidth, height: panelHeight), display: true)
+        toastPanel.alphaValue = 1
+        toastPanel.orderFrontRegardless()
+
+        // Drop in with spring overshoot
+        NSAnimationContext.runAnimationGroup { ctx in
+            ctx.duration = 0.12
+            ctx.timingFunction = CAMediaTimingFunction(name: .easeIn)
+            toastPanel.animator().setFrame(NSRect(x: x, y: droppedY, width: panelWidth, height: panelHeight), display: true)
+        } completionHandler: {
+            NSAnimationContext.runAnimationGroup { ctx in
+                ctx.duration = 0.28
+                ctx.timingFunction = CAMediaTimingFunction(controlPoints: 0.34, 1.56, 0.64, 1.0)
+                toastPanel.animator().setFrame(NSRect(x: x, y: visibleY, width: panelWidth, height: panelHeight), display: true)
+            } completionHandler: {
+                // Hold briefly, then slide back up
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.65) {
+                    NSAnimationContext.runAnimationGroup { ctx in
+                        ctx.duration = 0.12
+                        ctx.timingFunction = CAMediaTimingFunction(controlPoints: 0.4, 0.0, 1.0, 1.0)
+                        toastPanel.animator().setFrame(NSRect(x: x, y: hiddenY, width: panelWidth, height: panelHeight), display: true)
+                    } completionHandler: {
+                        toastPanel.orderOut(nil)
+                    }
                 }
             }
         }
@@ -357,7 +418,7 @@ struct InitializingDotsView: View {
         HStack(spacing: 4) {
             ForEach(0..<3, id: \.self) { index in
                 Circle()
-                    .fill(JottrTheme.textPrimary.opacity(activeDot == index ? 0.9 : 0.25))
+                    .fill(JottrTheme.amber.opacity(activeDot == index ? 1.0 : 0.3))
                     .frame(width: 4.5, height: 4.5)
                     .animation(.easeInOut(duration: 0.4), value: activeDot)
             }
@@ -420,9 +481,20 @@ struct RecordingOverlayView: View {
         .animation(.easeInOut(duration: 0.2), value: state.phase == .initializing)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay(
-            Rectangle()
-                .fill(JottrTheme.amber.opacity(state.isIntensityFlashing ? 0.22 : 0.0))
-                .animation(.easeOut(duration: 0.35), value: state.isIntensityFlashing)
+            ZStack {
+                // Amber background flash
+                Rectangle()
+                    .fill(JottrTheme.amber.opacity(state.isIntensityFlashing ? 0.18 : 0.0))
+
+                // Level name label that pops in during the drop
+                if state.isIntensityFlashing {
+                    Text(state.flashingLevelLabel.uppercased())
+                        .font(.system(size: 10, weight: .black, design: .rounded))
+                        .foregroundStyle(JottrTheme.amber)
+                        .transition(.opacity.combined(with: .scale(scale: 0.85)))
+                }
+            }
+            .animation(.easeOut(duration: 0.2), value: state.isIntensityFlashing)
         )
     }
 }
@@ -437,7 +509,7 @@ struct TranscribingIndicatorView: View {
         HStack(spacing: 4) {
             ForEach(0..<3, id: \.self) { index in
                 Circle()
-                    .fill(JottrTheme.textPrimary.opacity(animatingDot == index ? 0.9 : 0.25))
+                    .fill(JottrTheme.amber.opacity(animatingDot == index ? 1.0 : 0.3))
                     .frame(width: 4.5, height: 4.5)
                     .animation(.easeInOut(duration: 0.4), value: animatingDot)
             }
@@ -459,5 +531,23 @@ struct TranscribingIndicatorView: View {
     private func stopDotAnimation() {
         dotAnimationTimer?.invalidate()
         dotAnimationTimer = nil
+    }
+}
+
+// MARK: - Intensity Toast View (idle state)
+
+struct IntensityToastView: View {
+    let label: String
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Circle()
+                .fill(JottrTheme.amber)
+                .frame(width: 5, height: 5)
+            Text(label.uppercased())
+                .font(.system(size: 11, weight: .black, design: .rounded))
+                .foregroundStyle(JottrTheme.amber)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

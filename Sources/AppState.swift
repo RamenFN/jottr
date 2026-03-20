@@ -152,6 +152,10 @@ final class AppState: ObservableObject, @unchecked Sendable {
     @Published var intensityLevel: IntensityLevel {
         didSet {
             UserDefaults.standard.set(intensityLevel.rawValue, forKey: "intensityLevel")
+            overlayManager.setIntensityLevel(intensityLevel)
+            if isInitialized {
+                overlayManager.flashIntensityChange()
+            }
         }
     }
 
@@ -189,6 +193,7 @@ final class AppState: ObservableObject, @unchecked Sendable {
     @Published var availableMicrophones: [AudioDevice] = []
     @Published var snippetCount: Int = 0
 
+    private var isInitialized = false
     let audioRecorder = AudioRecorder()
     let hotkeyManager = HotkeyManager()
     private let intensityShortcutManager = IntensityShortcutManager()
@@ -268,6 +273,7 @@ final class AppState: ObservableObject, @unchecked Sendable {
         audioRecorder.shouldKeepEngineAlive = { [weak self] in
             self?.keepMicIndicatorAlive ?? true
         }
+        isInitialized = true
     }
 
     deinit {
@@ -530,10 +536,6 @@ final class AppState: ObservableObject, @unchecked Sendable {
         intensityShortcutManager.onIntensityChange = { [weak self] level in
             guard let self else { return }
             self.intensityLevel = level
-            self.overlayManager.setIntensityLevel(level)
-            if self.isRecording {
-                self.overlayManager.flashIntensityChange()
-            }
         }
         intensityShortcutManager.start()
     }
