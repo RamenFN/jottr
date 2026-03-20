@@ -49,8 +49,8 @@ const T = {
 };
 
 // Raw spoken words, clean result
-const RAW_WORDS = ['uh', 'hey', 'actually', 'like', 'can', 'we', 'push', 'the', 'standup', 'back?'];
-const CLEAN_WORDS = ['Hey,', 'can', 'we', 'push', 'the', 'standup', 'back?'];
+const RAW_WORDS = ['yeah', 'uh', 'actually', 'I', 'might', 'be', 'like', '20', 'minutes', 'late', 'just', 'heads', 'up'];
+const CLEAN_WORDS = ['Yeah', 'but', 'just', 'a', 'heads', 'up', 'I', 'might', 'be', '20', 'minutes', 'late.'];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function easedSpring(frame: number, fps: number, delay = 0, stiffness = 160, damping = 18) {
@@ -214,7 +214,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
   });
 
   // Raw words staggered in compose box
-  const STAGGER = 8;
+  const STAGGER = 6;
   const rawWordElements = RAW_WORDS.map((word, i) => {
     const wordStart = T.WORDS_START + i * STAGGER;
     if (frame < wordStart) return null;
@@ -300,7 +300,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
           fontSize: 13, color: 'rgba(245,245,240,0.55)', fontWeight: 600,
           letterSpacing: '-0.01em',
         }}>
-          Alex Chen
+          Jamie
         </div>
         {/* Avatar placeholder */}
         <div style={{
@@ -309,7 +309,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
           flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: FONT, fontSize: 11, fontWeight: 700, color: '#fff',
-        }}>A</div>
+        }}>J</div>
       </div>
 
       {/* Chat body */}
@@ -339,7 +339,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
               flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontFamily: FONT, fontSize: 12, fontWeight: 700, color: '#fff',
-            }}>A</div>
+            }}>J</div>
             <div style={{
               background: C.bubble,
               borderRadius: '16px 16px 16px 4px',
@@ -347,7 +347,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
               maxWidth: '60%',
             }}>
               <div style={{ fontFamily: FONT, fontSize: 15, color: C.white, lineHeight: 1.45 }}>
-                Hey, are we still on for the standup today?
+                You still coming tonight?
               </div>
             </div>
           </div>
@@ -361,7 +361,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
               maxWidth: '55%',
             }}>
               <div style={{ fontFamily: FONT, fontSize: 15, color: C.white, lineHeight: 1.45 }}>
-                Let me check, one sec
+                Should be there
               </div>
             </div>
           </div>
@@ -402,7 +402,7 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
             {/* Placeholder */}
             {frame < T.CURSOR_START && (
               <div style={{ fontFamily: FONT, fontSize: 15, color: 'rgba(245,245,240,0.2)' }}>
-                Message Alex...
+                Message Jamie...
               </div>
             )}
 
