@@ -50,7 +50,7 @@ const T = {
 
 // Raw spoken words, clean result
 const RAW_WORDS = ['uh', 'hey', 'actually', 'like', 'can', 'we', 'push', 'the', 'standup', 'back?'];
-const CLEAN_WORDS = ['Hey,', 'can', 'we', 'push', 'the', 'standup?'];
+const CLEAN_WORDS = ['Hey,', 'can', 'we', 'push', 'the', 'standup', 'back?'];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function easedSpring(frame: number, fps: number, delay = 0, stiffness = 160, damping = 18) {
