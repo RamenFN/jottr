@@ -101,6 +101,73 @@ GitHub Actions picks it up and publishes a release with `Jottr.dmg` attached.
 
 ---
 
+## What's coming
+
+Jottr started as a dictation tool. The next version goes further.
+
+### Ambient AI — always aware, never in the way
+
+An AI layer that sees what's on your screen and understands what you're doing — across every app, every context — and surfaces the right information exactly when you need it. No copy-pasting. No switching tabs. No prompting.
+
+---
+
+### Meeting Copilot
+
+Sit down, open Jottr, start your call. No bots. No third-party integrations. No one else knows it's running.
+
+Jottr listens to your meeting through the system — capturing both sides of the conversation — and builds a running transcript in the background. When the call ends, one hotkey gives you a full summary, key decisions, and action items, pasted wherever your cursor is.
+
+**Works for:**
+- **Lectures & study sessions** — never scramble to keep up with notes again. Focus on understanding while Jottr captures everything. Review the summary after class.
+- **Work standups & planning meetings** — decisions, blockers, and next steps extracted automatically. No more "wait, what did we agree on?"
+- **Sales calls** — capture objections, commitments, and follow-ups in real time. Walk out of every call with a structured summary ready to drop into your CRM.
+- **Client calls & interviews** — full transcript + highlights without a recording bot making the other person uncomfortable.
+- **Doctor appointments, legal consultations, any call where you need to remember everything** — Jottr runs silently and hands you the notes after.
+
+---
+
+### Screen-Aware Responses
+
+Jottr can already see your screen. Soon it'll use that to help you write.
+
+Open an email thread, a Slack message, a support ticket — hold your hotkey and speak a rough thought. Jottr reads the full context on screen and rewrites your response to match the situation. No copy-pasting the thread. No explaining the backstory. It already knows.
+
+---
+
+### Clipboard Transformer
+
+Copy any text. Hold your hotkey. Speak what you want done.
+
+> *"Make this shorter."*
+> *"Translate to Spanish."*
+> *"Turn this into a cold email."*
+> *"Make it more formal."*
+
+The result pastes back instantly. Works on anything — emails, docs, code, messages, articles.
+
+---
+
+### Voice to Action
+
+Say it, done. Jottr parses natural language and routes it to the right macOS app — no extra setup, no third-party accounts.
+
+> *"Remind me to follow up with this on Friday"* → Reminders entry, done.
+> *"Add a meeting with the team at 3pm tomorrow"* → Calendar event, done.
+> *"Draft a reply to this email"* → Mail opens with a pre-filled draft.
+
+---
+
+### Daily Voice Log
+
+Speak quick thoughts throughout your day — ideas, decisions, observations, things you don't want to forget. Jottr collects them quietly. At the end of the day, one hotkey synthesizes everything into structured notes: what you worked on, what you decided, what to follow up on.
+
+---
+
+> Everything stays on your machine. One Groq API key. No subscription. No servers.
+> **Star the repo to follow along.**
+
+---
+
 ## Attribution
 
 Built on [FreeFlow](https://github.com/zachlatta/freeflow) by [@zachlatta](https://github.com/zachlatta). The audio capture, transcription pipeline, and paste mechanics are from FreeFlow. Everything from the intensity system forward is new.
