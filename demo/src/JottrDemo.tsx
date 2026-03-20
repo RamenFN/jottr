@@ -49,7 +49,7 @@ const T = {
 };
 
 // Raw spoken words, clean result
-const RAW_WORDS = ['uh', 'hey', 'actually', 'like', 'can', 'we', 'push', 'the', 'standup'];
+const RAW_WORDS = ['uh', 'hey', 'actually', 'like', 'can', 'we', 'push', 'the', 'standup', 'back?'];
 const CLEAN_WORDS = ['Hey,', 'can', 'we', 'push', 'the', 'standup?'];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -307,7 +307,9 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
           width: 24, height: 24, borderRadius: '50%',
           background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
           flexShrink: 0,
-        }} />
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: FONT, fontSize: 11, fontWeight: 700, color: '#fff',
+        }}>A</div>
       </div>
 
       {/* Chat body */}
@@ -335,7 +337,9 @@ const MessageScreen: React.FC<{ frame: number; fps: number }> = ({ frame, fps })
               width: 28, height: 28, borderRadius: '50%',
               background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
               flexShrink: 0,
-            }} />
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: FONT, fontSize: 12, fontWeight: 700, color: '#fff',
+            }}>A</div>
             <div style={{
               background: C.bubble,
               borderRadius: '16px 16px 16px 4px',
