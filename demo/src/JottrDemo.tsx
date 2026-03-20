@@ -508,23 +508,23 @@ export const JottrDemo: React.FC = () => {
         Jottr
       </div>
 
-      {/* "Hold Fn to dictate" hint */}
-      {frame >= T.CURSOR_START && frame < T.NOTCH_DROP && (() => {
-        const { opacity } = fadeSlideUp(frame, T.CURSOR_START, 16, 10);
-        const exitOpacity = interpolate(frame, [T.NOTCH_DROP - 14, T.NOTCH_DROP], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+      {/* "Hold Fn to dictate" hint — appears early, stays until notch drops */}
+      {frame >= 10 && frame < T.NOTCH_DROP && (() => {
+        const { opacity } = fadeSlideUp(frame, 10, 16, 10);
+        const exitOpacity = interpolate(frame, [T.NOTCH_DROP - 10, T.NOTCH_DROP], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
         return (
           <div style={{
-            position: 'absolute', bottom: 48, left: 0, right: 0,
+            position: 'absolute', bottom: 28, left: 0, right: 0,
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             opacity: opacity * exitOpacity, zIndex: 10,
           }}>
             <div style={{
-              fontFamily: FONT, fontSize: 14, color: C.muted,
-              background: 'rgba(255,255,255,0.06)', borderRadius: 8,
-              padding: '7px 14px', border: `1px solid ${C.border}`,
+              fontFamily: FONT, fontSize: 17, color: C.muted,
+              background: 'rgba(255,255,255,0.06)', borderRadius: 10,
+              padding: '9px 18px', border: `1px solid ${C.border}`,
               letterSpacing: '0.02em',
             }}>
-              Hold <span style={{ color: C.amber, fontWeight: 600 }}>Fn</span> to dictate
+              Hold <span style={{ color: C.amber, fontWeight: 700 }}>Fn</span> to dictate
             </div>
           </div>
         );
@@ -535,16 +535,16 @@ export const JottrDemo: React.FC = () => {
         const { opacity } = fadeSlideUp(frame, T.NOTCH_DROP, 12, 8);
         return (
           <div style={{
-            position: 'absolute', bottom: 48, left: 0, right: 0,
+            position: 'absolute', bottom: 28, left: 0, right: 0,
             display: 'flex', justifyContent: 'center',
             opacity, zIndex: 10,
           }}>
             <div style={{
-              fontFamily: FONT, fontSize: 13, color: C.amber,
+              fontFamily: FONT, fontSize: 16, color: C.amber,
               background: 'rgba(249,115,22,0.1)',
               border: `1px solid rgba(249,115,22,0.3)`,
-              borderRadius: 8, padding: '6px 14px',
-              letterSpacing: '0.03em',
+              borderRadius: 10, padding: '9px 18px',
+              letterSpacing: '0.03em', fontWeight: 500,
             }}>
               Fn ↓  recording...
             </div>
@@ -557,17 +557,17 @@ export const JottrDemo: React.FC = () => {
         const { opacity } = fadeSlideUp(frame, T.UNDERLINE_IN + 30, 18, 10);
         return (
           <div style={{
-            position: 'absolute', bottom: 44, left: 0, right: 0,
+            position: 'absolute', bottom: 20, left: 0, right: 0,
             display: 'flex', justifyContent: 'center',
             opacity, zIndex: 10,
           }}>
             <div style={{
-              fontFamily: FONT, fontSize: 13,
-              color: 'rgba(249,115,22,0.6)',
-              letterSpacing: '0.03em',
-              display: 'flex', alignItems: 'center', gap: 6,
+              fontFamily: FONT, fontSize: 17, fontWeight: 700,
+              color: 'rgba(249,115,22,0.75)',
+              letterSpacing: '0.01em',
+              display: 'flex', alignItems: 'center', gap: 7,
             }}>
-              <div style={{ width: 5, height: 5, borderRadius: '50%', background: C.amber, opacity: 0.8 }} />
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.amber, opacity: 0.9 }} />
               Better dictation with Jottr
             </div>
           </div>
