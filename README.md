@@ -18,6 +18,10 @@
   <sub>macOS 13.0+ &nbsp;·&nbsp; Apple Silicon + Intel &nbsp;·&nbsp; Free &amp; open source</sub>
 </p>
 
+<p align="center">
+  <img src="Resources/demo.gif" alt="Jottr in action — hold to dictate, AI rewrites instantly" width="900">
+</p>
+
 ---
 
 ## What it does

@@ -4,4 +4,7 @@ build/
 *.swp
 .env
 remotion/node_modules/
+demo/node_modules/
+demo/out/
+demo/.cache/
 .planning/
