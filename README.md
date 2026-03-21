@@ -79,7 +79,7 @@ Snippets are applied before the rewriting step, so the LLM treats expanded text 
 
 ---
 
-## Build from source
+## Build from source <sup>for developers & forks only — not required for regular use</sup>
 
 ```bash
 git clone https://github.com/RamenFN/jottr.git
