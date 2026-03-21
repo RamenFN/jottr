@@ -28,9 +28,7 @@
 
 Hold a hotkey → speak → release. Jottr transcribes your voice and rewrites it, then pastes directly wherever your cursor is. No app switching, no clipboard fumbling, no dictation mode.
 
-The rewriting is the part that makes it different.
-
-### Four intensity levels
+### 🎚️ Four intensity levels
 
 | Level | What it does |
 |-------|-------------|
@@ -41,15 +39,25 @@ The rewriting is the part that makes it different.
 
 Switch levels instantly from the menu bar or with `Option+1/2/3/4` — no settings window required.
 
-### Built-in anti-slop rules
+### 🚫 Built-in anti-slop rules
 
-Every level blocks the tells that make AI writing recognizable: em-dash overuse, filler openers ("Certainly!", "Great question!"), inflated vocabulary ("utilize", "leverage", "delve into"), and unearned bullet-point structure. Output sounds like you wrote it because the rules are written to enforce that.
+Blocks the tells that make AI writing recognizable:
+- No em-dash overuse
+- No filler openers ("Certainly!", "Great question!")
+- No inflated vocabulary ("utilize", "leverage", "delve into")
+- No unearned bullet-point structure
 
-### Voice snippets
+Output sounds like you wrote it because the rules are written to enforce that.
 
-Define trigger phrases that expand to longer text. Say "my email" → your email address. Say "sign off" → your standard closing paragraph. Snippets are applied before the rewriting step, so the LLM treats expanded text as your own words and won't rephrase it away.
+### ⚡ Voice snippets
 
-### Everything else
+Define trigger phrases that expand to longer text:
+- Say `"my email"` → your email address
+- Say `"sign off"` → your standard closing paragraph
+
+Snippets are applied before the rewriting step, so the LLM treats expanded text as your own words.
+
+### 🔧 Everything else
 
 - **Groq-powered** — Whisper large-v3 for transcription, Llama 4 Scout for rewriting. Fast and free-tier-friendly.
 - **Persistent settings** — intensity level, custom per-level prompts, snippet library, all survive restarts.
@@ -105,40 +113,38 @@ GitHub Actions picks it up and publishes a release with `Jottr.dmg` attached.
 
 ---
 
-## What's coming ✨✨📈
+## What's coming ✨
 
 Jottr started as a dictation tool. The next version goes further.
 
-### Ambient AI — always aware, never in the way
+### 🧠 Ambient AI — always aware, never in the way
 
 An AI layer that sees what's on your screen and understands what you're doing — across every app, every context — and surfaces the right information exactly when you need it. No copy-pasting. No switching tabs. No prompting.
 
 ---
 
-### Meeting Copilot
+### 🎙️ Meeting Copilot
 
 Sit down, open Jottr, start your call. No bots. No third-party integrations. No one else knows it's running.
 
-Jottr listens to your meeting through the system — capturing both sides of the conversation — and builds a running transcript in the background. When the call ends, one hotkey gives you a full summary, key decisions, and action items, pasted wherever your cursor is.
+Jottr listens through the system — capturing both sides — and builds a running transcript in the background. When the call ends, one hotkey gives you a full summary, key decisions, and action items, pasted wherever your cursor is.
 
 **Works for:**
-- **Lectures & study sessions** — never scramble to keep up with notes again. Focus on understanding while Jottr captures everything. Review the summary after class.
-- **Work standups & planning meetings** — decisions, blockers, and next steps extracted automatically. No more "wait, what did we agree on?"
-- **Sales calls** — capture objections, commitments, and follow-ups in real time. Walk out of every call with a structured summary ready to drop into your CRM.
-- **Client calls & interviews** — full transcript + highlights without a recording bot making the other person uncomfortable.
-- **Doctor appointments, legal consultations, any call where you need to remember everything** — Jottr runs silently and hands you the notes after.
+- 📚 **Lectures & study sessions** — focus on understanding while Jottr captures everything
+- 💼 **Work standups & planning meetings** — decisions, blockers, and next steps extracted automatically
+- 📞 **Sales calls** — capture objections, commitments, and follow-ups in real time
+- 🤝 **Client calls & interviews** — full transcript without a recording bot making anyone uncomfortable
+- 🏥 **Doctor appointments, legal consultations, any call where you need to remember everything**
 
 ---
 
-### Screen-Aware Responses
-
-Jottr can already see your screen. Soon it'll use that to help you write.
+### 🖥️ Screen-Aware Responses
 
 Open an email thread, a Slack message, a support ticket — hold your hotkey and speak a rough thought. Jottr reads the full context on screen and rewrites your response to match the situation. No copy-pasting the thread. No explaining the backstory. It already knows.
 
 ---
 
-### Clipboard Transformer
+### 📋 Clipboard Transformer
 
 Copy any text. Hold your hotkey. Speak what you want done.
 
@@ -151,7 +157,7 @@ The result pastes back instantly. Works on anything — emails, docs, code, mess
 
 ---
 
-### Voice to Action
+### 🗣️ Voice to Action
 
 Say it, done. Jottr parses natural language and routes it to the right macOS app — no extra setup, no third-party accounts.
 
@@ -161,9 +167,9 @@ Say it, done. Jottr parses natural language and routes it to the right macOS app
 
 ---
 
-### Daily Voice Log
+### 📓 Daily Voice Log
 
-Speak quick thoughts throughout your day — ideas, decisions, observations, things you don't want to forget. Jottr collects them quietly. At the end of the day, one hotkey synthesizes everything into structured notes: what you worked on, what you decided, what to follow up on.
+Speak quick thoughts throughout your day — ideas, decisions, observations. Jottr collects them quietly. At the end of the day, one hotkey synthesizes everything into structured notes: what you worked on, what you decided, what to follow up on.
 
 ---
 
