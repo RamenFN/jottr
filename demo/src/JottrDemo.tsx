@@ -508,15 +508,38 @@ export const JottrDemo: React.FC = () => {
         Jottr
       </div>
 
-      {/* "Hold Fn to dictate" hint — appears early, drops down + fades on exit */}
-      {frame >= 10 && frame < T.NOTCH_DROP + 18 && (() => {
+      {/* Fn pill — single element that morphs from "Hold Fn to dictate" → "Fn ↓ recording..." */}
+      {frame >= 10 && frame < T.NOTCH_EXIT + 18 && (() => {
+        // Entrance
         const { opacity: inOpacity, ty: inTy } = fadeSlideUp(frame, 10, 16, 10);
-        const exitProgress = interpolate(frame, [T.NOTCH_DROP, T.NOTCH_DROP + 18], [0, 1], {
+
+        // Morph progress: 0 = hint state, 1 = recording state
+        const morphProgress = interpolate(frame, [T.NOTCH_DROP, T.NOTCH_DROP + 16], [0, 1], {
+          extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+          easing: Easing.inOut(Easing.cubic),
+        });
+
+        // Exit (drops down after recording ends)
+        const exitProgress = interpolate(frame, [T.NOTCH_EXIT, T.NOTCH_EXIT + 18], [0, 1], {
           extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
           easing: Easing.in(Easing.cubic),
         });
+
         const opacity = inOpacity * (1 - exitProgress);
         const ty = inTy + interpolate(exitProgress, [0, 1], [0, 14]);
+
+        // Cross-fade the two text labels
+        const hintOpacity = 1 - morphProgress;
+        const recOpacity = morphProgress;
+
+        // Morph pill background and border color
+        const pillBg = morphProgress < 0.5
+          ? `rgba(255,255,255,${interpolate(morphProgress, [0, 0.5], [0.06, 0.08])})`
+          : `rgba(249,115,22,${interpolate(morphProgress, [0.5, 1], [0.04, 0.10])})`;
+        const pillBorder = morphProgress < 0.5
+          ? `rgba(255,255,255,${interpolate(morphProgress, [0, 0.5], [0.07, 0.12])})`
+          : `rgba(249,115,22,${interpolate(morphProgress, [0.5, 1], [0.12, 0.30])})`;
+
         return (
           <div style={{
             position: 'absolute', bottom: 28, left: 0, right: 0,
@@ -524,40 +547,32 @@ export const JottrDemo: React.FC = () => {
             opacity, transform: `translateY(${ty}px)`, zIndex: 10,
           }}>
             <div style={{
-              fontFamily: FONT, fontSize: 17, color: C.muted,
-              background: 'rgba(255,255,255,0.06)', borderRadius: 10,
-              padding: '9px 18px', border: `1px solid ${C.border}`,
-              letterSpacing: '0.02em',
+              fontFamily: FONT, fontSize: 17, borderRadius: 10,
+              padding: '9px 18px', letterSpacing: '0.02em',
+              background: pillBg,
+              border: `1px solid ${pillBorder}`,
+              position: 'relative', overflow: 'hidden',
             }}>
-              Hold <span style={{ color: C.amber, fontWeight: 700 }}>Fn</span> to dictate
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* Recording indicator — slides in, drops down + fades on exit */}
-      {frame >= T.NOTCH_DROP && frame < T.NOTCH_EXIT + 18 && (() => {
-        const { opacity: inOpacity, ty: inTy } = fadeSlideUp(frame, T.NOTCH_DROP, 12, 8);
-        const exitProgress = interpolate(frame, [T.NOTCH_EXIT, T.NOTCH_EXIT + 18], [0, 1], {
-          extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
-          easing: Easing.in(Easing.cubic),
-        });
-        const opacity = inOpacity * (1 - exitProgress);
-        const ty = inTy + interpolate(exitProgress, [0, 1], [0, 14]);
-        return (
-          <div style={{
-            position: 'absolute', bottom: 28, left: 0, right: 0,
-            display: 'flex', justifyContent: 'center',
-            opacity, transform: `translateY(${ty}px)`, zIndex: 10,
-          }}>
-            <div style={{
-              fontFamily: FONT, fontSize: 16, color: C.amber,
-              background: 'rgba(249,115,22,0.1)',
-              border: `1px solid rgba(249,115,22,0.3)`,
-              borderRadius: 10, padding: '9px 18px',
-              letterSpacing: '0.03em', fontWeight: 500,
-            }}>
-              Fn ↓  recording...
+              {/* Hint label */}
+              <div style={{
+                opacity: hintOpacity,
+                transform: `translateY(${interpolate(morphProgress, [0, 1], [0, -8])}px)`,
+                color: C.muted,
+                position: morphProgress > 0 ? 'absolute' : 'relative',
+                whiteSpace: 'nowrap',
+              }}>
+                Hold <span style={{ color: C.amber, fontWeight: 700 }}>Fn</span> to dictate
+              </div>
+              {/* Recording label */}
+              <div style={{
+                opacity: recOpacity,
+                transform: `translateY(${interpolate(morphProgress, [0, 1], [8, 0])}px)`,
+                color: C.amber, fontWeight: 500,
+                position: morphProgress > 0 ? 'relative' : 'absolute',
+                whiteSpace: 'nowrap',
+              }}>
+                Fn ↓  recording...
+              </div>
             </div>
           </div>
         );
