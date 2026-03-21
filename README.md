@@ -28,7 +28,7 @@
 
 Hold a hotkey → speak → release. Jottr transcribes your voice and rewrites it, then pastes directly wherever your cursor is. No app switching, no clipboard fumbling, no dictation mode.
 
-### 🎚️ Four intensity levels
+### ⚙️ Four intensity levels
 
 | Level | What it does |
 |-------|-------------|
