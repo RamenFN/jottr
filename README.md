@@ -39,7 +39,7 @@ Hold a hotkey → speak → release. Jottr transcribes your voice and rewrites i
 
 Switch levels instantly from the menu bar or with `Option+1/2/3/4` — no settings window required.
 
-### 🚫 Built-in anti-slop rules
+### 🚫🤖 Built-in anti-slop rules
 
 Blocks the tells that make AI writing recognizable:
 - No em-dash overuse
