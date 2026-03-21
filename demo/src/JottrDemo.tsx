@@ -508,15 +508,20 @@ export const JottrDemo: React.FC = () => {
         Jottr
       </div>
 
-      {/* "Hold Fn to dictate" hint — appears early, stays until notch drops */}
-      {frame >= 10 && frame < T.NOTCH_DROP && (() => {
-        const { opacity } = fadeSlideUp(frame, 10, 16, 10);
-        const exitOpacity = interpolate(frame, [T.NOTCH_DROP - 10, T.NOTCH_DROP], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+      {/* "Hold Fn to dictate" hint — appears early, drops down + fades on exit */}
+      {frame >= 10 && frame < T.NOTCH_DROP + 18 && (() => {
+        const { opacity: inOpacity, ty: inTy } = fadeSlideUp(frame, 10, 16, 10);
+        const exitProgress = interpolate(frame, [T.NOTCH_DROP, T.NOTCH_DROP + 18], [0, 1], {
+          extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+          easing: Easing.in(Easing.cubic),
+        });
+        const opacity = inOpacity * (1 - exitProgress);
+        const ty = inTy + interpolate(exitProgress, [0, 1], [0, 14]);
         return (
           <div style={{
             position: 'absolute', bottom: 28, left: 0, right: 0,
             display: 'flex', justifyContent: 'center', alignItems: 'center',
-            opacity: opacity * exitOpacity, zIndex: 10,
+            opacity, transform: `translateY(${ty}px)`, zIndex: 10,
           }}>
             <div style={{
               fontFamily: FONT, fontSize: 17, color: C.muted,
@@ -530,14 +535,20 @@ export const JottrDemo: React.FC = () => {
         );
       })()}
 
-      {/* Recording indicator */}
-      {frame >= T.NOTCH_DROP && frame < T.NOTCH_EXIT && (() => {
-        const { opacity } = fadeSlideUp(frame, T.NOTCH_DROP, 12, 8);
+      {/* Recording indicator — slides in, drops down + fades on exit */}
+      {frame >= T.NOTCH_DROP && frame < T.NOTCH_EXIT + 18 && (() => {
+        const { opacity: inOpacity, ty: inTy } = fadeSlideUp(frame, T.NOTCH_DROP, 12, 8);
+        const exitProgress = interpolate(frame, [T.NOTCH_EXIT, T.NOTCH_EXIT + 18], [0, 1], {
+          extrapolateLeft: 'clamp', extrapolateRight: 'clamp',
+          easing: Easing.in(Easing.cubic),
+        });
+        const opacity = inOpacity * (1 - exitProgress);
+        const ty = inTy + interpolate(exitProgress, [0, 1], [0, 14]);
         return (
           <div style={{
             position: 'absolute', bottom: 28, left: 0, right: 0,
             display: 'flex', justifyContent: 'center',
-            opacity, zIndex: 10,
+            opacity, transform: `translateY(${ty}px)`, zIndex: 10,
           }}>
             <div style={{
               fontFamily: FONT, fontSize: 16, color: C.amber,
